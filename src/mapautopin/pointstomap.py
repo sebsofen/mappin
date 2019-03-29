@@ -14,9 +14,8 @@ def pointstomap(points: list, contourfile = 'ne_110m_admin_0_countries.geojson')
 
     features = [x for x in js['features'] if len([y for y in points if  shape(x['geometry']).contains(Point(y))]) > 0]
 
-
     proj=ccrs.Miller()
-    fig = plt.figure(num=None, figsize=(12, 12), dpi=96, facecolor='w', edgecolor='k')
+    fig = plt.figure(figsize=(12, 12), dpi=96, facecolor='w', edgecolor='k')
     ax = fig.add_subplot(1, 1, 1, projection=proj)
     ax.scatter(*np.array(points).T, color='black', marker=".", linewidth=3, transform=ccrs.PlateCarree())
     plt.axis('off')
@@ -35,9 +34,8 @@ def pointstomap(points: list, contourfile = 'ne_110m_admin_0_countries.geojson')
     
 
     imgdata = io.BytesIO()
-    plt.savefig("test.svg", format='svg')
     plt.savefig(imgdata, format='svg')
-    plt.close()
+    plt.close(fig)
     imgdata.seek(0)  # rewind the data
 
     return imgdata

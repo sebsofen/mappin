@@ -22,4 +22,5 @@ RUN pip install --no-cache-dir scipy
 
 ADD src/ .
 
-CMD [ "python", "./webserver.py" ]
+
+CMD [ "./server.sh" ]
