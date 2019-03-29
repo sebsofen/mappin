@@ -9,8 +9,7 @@ app = Flask(__name__)
 def get_points_in_country():
     pointsstr = request.args.get('points', "[]")
     points = json.loads(pointsstr)
-    print(points)
-    return pointstomap.pointstomap(points).read()
+    return  Response(pointstomap.pointstomap(points).read(), mimetype='image/svg+xml')
 
 if __name__ == '__main__':
-    app.run(threaded=True, host='0.0.0.0', port='5123')
+    app.run(host='0.0.0.0', port='5123')
