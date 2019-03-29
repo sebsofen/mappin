@@ -1,0 +1,54 @@
+kind: pipeline
+name: default
+
+steps:
+- name: build
+  image: docker
+  commands:
+    - docker build -t mapautopin:latest .
+  volumes:
+    - name: dockerhost
+      path: /var/run/docker.sock
+
+- name: ansible checkout
+  image: docker:git
+  volumes:
+  - name: ansible-cache
+    path: /ansible
+  - name: ssh-keys
+    path: /root/.ssh
+  commands:
+  - "echo $USER"
+  - "cd /ansible; git clone ssh://git@git.trailmagic.de:3011/sebastian/server-ansible.git"
+
+- name: deploy
+  image: mullnerz/ansible-playbook
+  commands:
+  - cd /ansible/server-ansible; ansible-playbook -i "5.189.164.144," setup_mapautopin.yml
+  volumes:
+  - name: ssh-keys
+    path: /root/.ssh
+  - name: ansible-cache
+    path: /ansible
+- name: telegram notify
+  image: appleboy/drone-telegram
+  settings:
+    token: 493097792:AAHmKAocGRU7I4rnpP12ODDfTyOFujMUqs4
+    to: 37060489
+    message: >
+      {{#success build.status}}
+        mapautopin build {{build.number}} succeeded. Good job.
+      {{else}}
+        mapautopin build {{build.number}} failed. Fix me please.
+      {{/success}}
+
+
+volumes:
+- name: dockerhost
+  host:
+    path: /var/run/docker.sock
+- name: ansible-cache
+  temp: {}
+- name: ssh-keys
+  host:
+    path: /root/.ssh
