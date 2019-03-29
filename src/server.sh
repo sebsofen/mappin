@@ -1,3 +1,3 @@
 #!/bin/bash
 # flask settings
-python webserver.py
+gunicorn --bind 0.0.0.0:5123  webserver:app

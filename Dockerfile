@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir numpy
 RUN pip install --no-cache-dir matplotlib
 RUN pip install --no-cache-dir cartopy
 RUN pip install --no-cache-dir scipy
-
+RUN pip install --no-cache-dir gunicorn
 ADD src/ .
 
 
