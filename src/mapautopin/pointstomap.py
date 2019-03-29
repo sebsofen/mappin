@@ -37,6 +37,7 @@ def pointstomap(points: list, contourfile = 'ne_110m_admin_0_countries.geojson')
     imgdata = io.BytesIO()
     plt.savefig("test.svg", format='svg')
     plt.savefig(imgdata, format='svg')
+    plt.close()
     imgdata.seek(0)  # rewind the data
 
     return imgdata
