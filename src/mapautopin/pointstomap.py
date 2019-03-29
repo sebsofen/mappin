@@ -15,11 +15,19 @@ def pointstomap(points: list, contourfile = 'ne_110m_admin_0_countries.geojson')
     features = [x for x in js['features'] if len([y for y in points if  shape(x['geometry']).contains(Point(y))]) > 0]
 
     proj=ccrs.Miller()
-    fig = plt.figure(figsize=(12, 12), dpi=96, facecolor='w', edgecolor='k')
+    fig = plt.figure(figsize=(12, 12), dpi=96, facecolor='w', edgecolor='k', frameon=False)    
     ax = fig.add_subplot(1, 1, 1, projection=proj)
+    fig.patch.set_visible(False)
     ax.scatter(*np.array(points).T, color='black', marker=".", linewidth=3, transform=ccrs.PlateCarree())
-    plt.axis('off')
 
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['bottom'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+
+    plt.axis('off')
+    plt.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
+    
     for feature in features:
         geo = shape(feature['geometry'])
         if geo.geom_type == 'MultiPolygon':
@@ -35,6 +43,7 @@ def pointstomap(points: list, contourfile = 'ne_110m_admin_0_countries.geojson')
 
     imgdata = io.BytesIO()
     plt.savefig(imgdata, format='svg')
+    
     plt.close(fig)
     imgdata.seek(0)  # rewind the data
 
