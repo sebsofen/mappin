@@ -22,7 +22,7 @@ def pointstomap(points: list, contourfile = 'ne_110m_admin_0_countries.geojson')
     fig.patch.set_alpha(0)
     ax.patch.set_alpha(0)
     
-    ax.scatter(*np.array(points).T, color='black', marker=".", linewidth=3, transform=ccrs.PlateCarree())
+    ax.scatter(*np.array(points).T, s=1, color='black', marker=".", linewidth=3, transform=ccrs.PlateCarree())
 
  
     ax.get_xaxis().set_visible(False)
