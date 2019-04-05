@@ -7,12 +7,16 @@ import os
 import sys
 import io
 
-def pointstomap(points: list, contourfile = 'ne_110m_admin_0_countries.geojson') -> io.BytesIO:
+import constants as cts
+
+def pointstomap(points: list, marker_style, contourfile = 'ne_110m_admin_0_countries.geojson') -> io.BytesIO:
     #load points from actual blog
     with open(contourfile, 'r') as f:
         js = json.load(f)
 
     features = [x for x in js['features'] if len([y for y in points if  shape(x['geometry']).contains(Point(y))]) > 0]
+
+    
 
     proj=ccrs.Miller()
     fig = plt.figure( dpi=96, facecolor='w',  frameon=False)    
@@ -22,7 +26,10 @@ def pointstomap(points: list, contourfile = 'ne_110m_admin_0_countries.geojson')
     fig.patch.set_alpha(0)
     ax.patch.set_alpha(0)
     
-    ax.scatter(*np.array(points).T, s=1, color='black', marker=".", linewidth=3, transform=ccrs.PlateCarree())
+    if marker_style == cts.MARKER_STYLE_DOT:
+        ax.scatter(*np.array(points).T, s=1, color='black', marker=".", linewidth=3, transform=ccrs.PlateCarree())
+    elif marker_style == cts.MARKER_STYLE_LINE:
+        ax.plot(*np.array(points).T, s=1, color='black', linewidth=1, transform=ccrs.PlateCarree())
 
  
     ax.get_xaxis().set_visible(False)
