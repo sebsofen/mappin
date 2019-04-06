@@ -10,6 +10,13 @@ docker build -t mapautopin:latest .
 docker run -p 5123:5123 mapautopin:latest
 ```
 
+or you simply run the service via flask:
+
+```
+cd src
+python webserver.py
+```
+
 Test the api:
 
 ```
